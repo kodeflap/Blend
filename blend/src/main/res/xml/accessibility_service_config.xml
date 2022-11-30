@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityFlags="flagDefault"
+    android:canPerformGesrtures="true"
+    android:canTakeScreenshot="true"
+    android:description="Translate"
+    android:packageNames="com.kodeflap.blend.screen_translator" />
