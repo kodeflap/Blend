@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:accessibilityEventTypes="typeViewClicked|typeViewFocused"
+    android:accessibilityFeedbackType="feedbackSpoken"
+    android:accessibilityFlags="flagDefault"
+    android:canPerformGestures="true"
+    android:canTakeScreenshot="true"
+    android:description="@string/translate"
+    android:packageNames="com.kodeflap.blend"
+    tools:targetApi="n" />

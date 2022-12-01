@@ -1,10 +1,11 @@
-package com.kodeflap.blend.screen_translator
+package com.kodeflap.blend
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.GestureDescription
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Path
 import android.os.Build
@@ -17,7 +18,7 @@ import androidx.core.content.FileProvider
 import java.io.File
 import java.io.FileOutputStream
 
-const val FILE_PROVIDER_AUTHORITY = "com.kodeflap.blend.screen_translator.fileProvider"
+const val FILE_PROVIDER_AUTHORITY = "com.kodeflap.blend.fileProvider"
 const val MIME_TYPE = "image/jpeg"
 const val PACKAGE_NAME = "com.naver.labs.translator"
 const val INTENT_RECEIVER = "$PACKAGE_NAME.ui.main.DeepLinkActivity"
@@ -55,23 +56,21 @@ class ScreenTranslationService : AccessibilityService() {
             .addStroke(GestureDescription.StrokeDescription(path, 0, 50))
             .build()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            dispatchGesture(
-                gestureDescription,
-                object : GestureResultCallback() {
-                    @RequiresApi(Build.VERSION_CODES.R)
-                    override fun onCompleted(gestureDescription: GestureDescription?) {
-                        super.onCompleted(gestureDescription)
-                        screenshot()
-                    }
+        dispatchGesture(
+            gestureDescription,
+            object : GestureResultCallback() {
+                @RequiresApi(Build.VERSION_CODES.R)
+                override fun onCompleted(gestureDescription: GestureDescription?) {
+                    super.onCompleted(gestureDescription)
+                    screenshot()
+                }
 
-                    override fun onCancelled(gestureDescription: GestureDescription?) {
-                        super.onCancelled(gestureDescription)
-                        showToast("Translation Failed")
-                    }
-                }, null
-            )
-        }
+                override fun onCancelled(gestureDescription: GestureDescription?) {
+                    super.onCancelled(gestureDescription)
+                    showToast(R.string.translation_failed)
+                }
+            }, null
+        )
     }
 
     @RequiresApi(Build.VERSION_CODES.R)
@@ -87,7 +86,7 @@ class ScreenTranslationService : AccessibilityService() {
                     )
 
                     if (bitmap == null) {
-                        showToast("TranslationFailed")
+                        showToast(R.string.translation_failed)
                         return
                     }
                     val file = writeBitmapToFile(bitmap)
@@ -95,7 +94,7 @@ class ScreenTranslationService : AccessibilityService() {
                 }
 
                 override fun onFailure(p0: Int) {
-                    showToast("Translation Failed")
+                    showToast(R.string.translation_failed)
                 }
             }
         )
@@ -118,7 +117,7 @@ class ScreenTranslationService : AccessibilityService() {
         try {
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {
-            showToast("App Not Found")
+            showToast(R.string.app_not_found)
         }
     }
 
@@ -138,10 +137,10 @@ class ScreenTranslationService : AccessibilityService() {
         val intent =
             Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
-        showToast("Enable Screen Translator")
+        showToast(R.string.enable_screen_translator)
     }
 
-    private fun showToast(msg: String) {
+    private fun showToast(msg: Int) {
         Toast.makeText(application, msg, Toast.LENGTH_LONG).show()
     }
 

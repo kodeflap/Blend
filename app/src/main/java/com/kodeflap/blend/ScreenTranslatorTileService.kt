@@ -9,7 +9,8 @@ import androidx.annotation.RequiresApi
 class ScreenTranslatorTileService: TileService() {
     override fun onClick() {
         super.onClick()
-        val intent = Intent(application, ScreenTranslationService::class.java)
-        startService(intent)
+        Intent(this, ScreenTranslationService::class.java).also { intent ->
+            startService(intent)
+        }
     }
 }
